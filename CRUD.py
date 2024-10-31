@@ -204,6 +204,63 @@ def submenu3():
         print("Invalid choice, please choose 1 or 2.")
 
 
+def delete_student(ch):
+    # Delete by ID
+    if ch == 1:
+        delete_student_by_id(None)
+    # Delete by username
+    elif ch == 2:
+        surname = input("Give student's surname: ")
+        matching_students = search_student_by_surname(surname)
+
+        if not matching_students:
+            print("There are no students with this surname!")
+
+        elif len(matching_students) == 1:
+            student = matching_students[0]
+            delete_student_by_id(student['id'])  # Proceed directly to update if there's only one match
+
+        elif len(matching_students) > 1:
+            for s in matching_students:
+                print_student(s)
+                print(f"id = {s['id']}")
+                print("-" * 15)
+
+            # Prompt the user to select a student by ID from the matches
+            student_id = int(input("Please select a student's ID from the above list: "))
+            delete_student_by_id(student_id)  # Proceed to update the selected student
+
+
+
+def delete_student_by_id(student_id):
+    if student_id is None:  # If no ID is passed, ask the user for it
+        student_id = int(input("Give id: "))
+
+    for i in range(len(students)):
+        if student_id == students[i]['id']:  # χρησιμοποιούμε το σωστό όνομα μεταβλητής
+            students.pop(i)
+            print(f"Student with ID {student_id} deleted.")
+            return
+    print(f"No student found with ID {student_id}.")
+
+
+
+def submenu4():
+    print("         SUBMENU(DELETE)         ")
+    delete_choice = input("Choose 1 if you want to delete by id | Choose 2 if you want to delete by surname:")
+    if delete_choice.strip().isdigit():
+        delete_choice = int(delete_choice)
+    else:
+        print("Wrong input!")
+
+    if delete_choice == 1:
+        delete_student(1)
+
+    elif delete_choice == 2:
+        delete_student(2)
+
+    else:
+        print("Invalid choice, please choose 1 or 2.")
 
 
 def main():
@@ -225,7 +282,7 @@ def main():
             submenu3()
 
         elif user == 4:
-            pass
+            submenu4()
         elif user == 5:
             break
         else:
